@@ -60,6 +60,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 
 		//アイコンの設定
 		//オセロの駒
+		System.out.println("white");
 		whiteIcon = new ImageIcon("White5.png");
 		blackIcon = new ImageIcon("Black5.png");
 		boardIcon = new ImageIcon("nothing.png");
