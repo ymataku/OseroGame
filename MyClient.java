@@ -99,6 +99,9 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				}else if(i==3&&j==3){
 					buttonArray[i][j] = new JButton(whiteIcon);
 				}
+
+				
+				
 				else {
 					buttonArray[i][j] = new JButton(boardIcon);
 				}
@@ -185,7 +188,6 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		//通信状況を監視し，受信データによって動作する
 		public void run() {
 			try{
-				System.out.println("git branch development");
 				InputStreamReader sisr = new InputStreamReader(socket.getInputStream());
 				BufferedReader br = new BufferedReader(sisr);
 				out = new PrintWriter(socket.getOutputStream(), true);
@@ -371,9 +373,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
         for(int i=0;i<8;i++){
 			for(int j=0;j<8;j++){
 				if(buttonArray[j][i].getIcon() == boardIcon){
-				
                     check = 1;
-					// break;
 				}else if(buttonArray[j][i].getIcon() == blackIcon){
 					judgement[1] += 1; 
 				}else if(buttonArray[j][i].getIcon() == whiteIcon){
@@ -381,7 +381,6 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				}
 			}
 		}
-		
 		if(check == 0){
 			if(judgement[1] > judgement[2]){
 				judgement[0] = 2;
@@ -390,13 +389,13 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			}else if(judgement[1] == judgement[2]){
 				judgement[0] = 0;
 			}
-		}		
-		if(judgement[1] == 0){
-			judgement[0] = 1;
-		}else if(judgement[2] == 0){
-			judgement[0] = 2;
+		}else{		
+			if(judgement[1] == 0){
+				judgement[0] = 1;
+			}else if(judgement[2] == 0){
+				judgement[0] = 2;
+			}
 		}
-		
 		return judgement;
 	} 
 	
@@ -550,9 +549,6 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			}
 		}
 	}
-		
-	
-
 
 	//何回ひっくり返せるかの確認	
 	public int filpButtons(int y,int x,int j,int i){
@@ -664,8 +660,56 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		return flag;	
 	}
 	
+	public void mouseEntered(MouseEvent e) {//マウスがオブジェクトに入ったときの処理
+		// System.out.println("マウスが入った");
+	}
 	
+	public void mouseExited(MouseEvent e) {//マウスがオブジェクトから出たときの処理
+		// System.out.println("マウス脱出");
+	}
 	
+	public void mousePressed(MouseEvent e) {//マウスでオブジェクトを押したときの処理（クリックとの違いに注意）
+		// System.out.println("マウスを押した");
+	}
+	
+	public void mouseReleased(MouseEvent e) {//マウスで押していたオブジェクトを離したときの処理
+		// System.out.println("マウスを放した");
+	}
+	
+	public void mouseDragged(MouseEvent e) {//マウスでオブジェクトとをドラッグしているときの処理
+		// System.out.println("マウスをドラッグ");
+		JButton theButton = (JButton)e.getComponent();//型が違うのでキャストする
+		String theArrayIndex = theButton.getActionCommand();//ボタンの配列の番号を取り出す
+        if(theArrayIndex.equals("0")){
+			Point theMLoc = e.getPoint();//発生元コンポーネントを基準とする相対座標
+			System.out.println(theMLoc);//デバッグ（確認用）に，取得したマウスの位置をコンソールに出力する
+			Point theBtnLocation = theButton.getLocation();//クリックしたボタンを座標を取得する
+
+			String msg = "MOVE"+" "+theArrayIndex+" "+theBtnLocation.x+" "+theBtnLocation.y;
+
+			//サーバに情報を送る
+			out.println(msg);//送信データをバッファに書き出す
+			out.flush();//送信データをフラッシュ（ネットワーク上にはき出す）する
+
+			repaint();//オブジェクトの再描画を行う
+
+		}else{
+			Point theMLoc = e.getPoint();//発生元コンポーネントを基準とする相対座標
+			System.out.println(theMLoc);//デバッグ（確認用）に，取得したマウスの位置をコンソールに出力する
+			Point theBtnLocation = theButton.getLocation();//クリックしたボタンを座標を取得する
+			theBtnLocation.x += theMLoc.x-15;//ボタンの真ん中当たりにマウスカーソルがくるように補正する
+			theBtnLocation.y += theMLoc.y-15;//ボタンの真ん中当たりにマウスカーソルがくるように補正する
+			theButton.setLocation(theBtnLocation);//マウスの位置にあわせてオブジェクトを移動する
+	
+			//送信情報を作成する（受信時には，この送った順番にデータを取り出す．スペースがデータの区切りとなる）
+			String msg = "PLACE"+" "+theArrayIndex+" "+myColor;
+			//サーバに情報を送る
+			out.println(msg);//送信データをバッファに書き出す
+			out.flush();//送信データをフラッシュ（ネットワーク上にはき出す）する
+			repaint();//オブジェクトの再描画を行う
+		}
+	}
+
 	public void mouseMoved(MouseEvent e) {//マウスがオブジェクト上で移動したときの処理
 		System.out.println("マウス移動");
 		int theMLocX = e.getX();//マウスのx座標を得る
@@ -673,14 +717,8 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		System.out.println(theMLocX+","+theMLocY);//コンソールに出力する
 	}
 	public void actionPerformed(ActionEvent e) {
-
-		// timer.stop();
-		// System.out.println("アクション発生");
-        // System.out.println(e.getSource());
         String theCmd = e.getActionCommand();
-        // System.out.println("ActionCommand: "+theCmd);
         Object theObj = e.getSource();
-        // System.out.println("クラス名＝" + theObj.getClass().getName());
         String theClass = theObj.getClass().getName();//クラス名を使って動きを変える
 		//スタートを均一化
 		if(theCmd.equals("judgement")){
@@ -708,77 +746,36 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				out.flush();//送信データをフラッシュ（ネットワーク上にはき出す）する
 		}
 		if(theCmd.equals("ProgressBarStart")){
-			// if(myTurn == myColor){
-			// 	System.out.println("success");
-			// }else{
-			// 	String msg = "pass"+" "+1000;
-			// //サーバに情報を送る
-			// 	out.println(msg);//送信データをバッファに書き出す
-			// 	out.flush();//送信データをフラッシュ（ネットワーク上にはき出す）する
-			// }
 			if(timercheck == 0){
 				System.out.println("hello");
 			}else{
 				timer.stop();
-				
 			}
 			timercheck = 1;
 			theLabelA.setText("ProgressBarStart");
-			
 			timer = new Timer(myCount , this);
 			timer.setActionCommand("timer");
 			theProgressBar.setValue(myCount);
-			
-			// String sample = String.valueOf(120);
-			// theLabelForProgressBar.setText(sample);
 			theButtonStart.setEnabled(false);
 			timer.start();
-			
-        }
-		
-
+		}
 		if(theCmd.equals("timer")){
-			
 			if(myColor == myTurn){
 				theLabelA.setText("Timer");
 				int count = theProgressBar.getValue();
 				count = count - 1;
 				myCount = count;
-				
-
 				theProgressBar.setValue(count);
 				String test = String.format("%04d",theProgressBar.getValue());
 				theLabelForProgressBar.setText(test);
-				if(count<=0){//タイマーをとめる
+				if(count<=0){
 					timer.stop();
 					String msg = "lose"+" "+myColor;
-					//サーバに情報を送る
-					out.println(msg);//送信データをバッファに書き出す
-					out.flush();//送信データをフラッシュ（ネットワーク上にはき出す）する
+					out.println(msg);
+					out.flush();
 					
-				}
-				
-				
+				}	
 			}
-			
-			// String msg = "Count"+" "+number;
-			// out.println(msg);//送信データをバッファに書き出す
-			// out.flush();//送信データをフラッシュ（ネットワーク上にはき出す）する
-		
-			
-			// String number = String.valueOf(count);
-			// String msg = "Count"+" "+number;
-			
-			// repaint();//オブジェクトの再描画を行う
-
-            // theLabelA.setText("Timer");
-            // int count = theProgressBar.getValue();
-            // count = count + 1;
-            // theProgressBar.setValue(count);
-            // theLabelForProgressBar.setText(Integer.toString(count));
-            // if(count>=100){//タイマーをとめる
-            //     timer.stop();
-            // }
         }
     }
 }
