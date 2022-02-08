@@ -365,6 +365,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	
 	//Ÿ”s‚ª‚Â‚¢‚½‚©‚Ì”»’f‚ğ‚·‚é
 	public int [] judgement(){
+		System.out.println("this is judgement checking");
 		int check = 0;
 		int judge = 4;
 		int blackcount = 0;
@@ -374,6 +375,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			for(int j=0;j<8;j++){
 				if(buttonArray[j][i].getIcon() == boardIcon){
                     check = 1;
+					
 				}else if(buttonArray[j][i].getIcon() == blackIcon){
 					judgement[1] += 1; 
 				}else if(buttonArray[j][i].getIcon() == whiteIcon){
@@ -381,6 +383,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				}
 			}
 		}
+		System.out.println(check);
 		if(check == 0){
 			if(judgement[1] > judgement[2]){
 				judgement[0] = 2;
