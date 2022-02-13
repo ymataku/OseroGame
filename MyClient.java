@@ -104,11 +104,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				}else {
 					buttonArray[i][j] = new JButton(boardIcon);
 				}
-				// if(i%2==0){
-				// 	buttonArray[i][j] = new JButton(whiteIcon);
-				// }else{
-				// 	buttonArray[i][j] = new JButton(blackIcon);
-				// }
+				
 				c.add(buttonArray[i][j]);//ペインに貼り付ける
 			
 				buttonArray[i][j].setBounds(j*60,60*i,60,60);//ボタンの大きさと位置を設定する．(x座標，y座標,xの幅,yの幅）
