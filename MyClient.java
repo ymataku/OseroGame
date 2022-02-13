@@ -27,6 +27,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	private int myCount = 1000;
 	private int timercheck = 0;
 	private int black = 0,white = 0;
+	private int end = 0;
 	int check = 0;
 	int checking = 0;
     JProgressBar theProgressBar;
@@ -214,6 +215,9 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				}
 				
 				while(true) {
+					if(end == 1){
+						break;
+					}
 					int turnchange = 0;
 					String inputLine = br.readLine();//データを一行分だけ読み込んでみる
 					if (inputLine != null) {//読み込んだときにデータが読み込まれたかどうかをチェックする
@@ -473,22 +477,21 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		
 		//引き分けの時
 		if(judgement == 0){
-			
+			end = 1;
 			
 		}else if(judgement == 1 || passcount2 == 2){
 		    //白の勝ち
 			c.removeAll();
 			if(myColor == 0){
-			
 				c.add(winlabel);
 				winlabel.setBounds(0,0,767,645);
 			}else{
-				
 				c.add(loselabel);
 				loselabel.setBounds(0,0,767,645);
-
 			}
-			timer.stop();
+		end = 1;
+		timer.stop();
+	
 
 		}else if(judgement == 2 || passcount1 == 2){
 			//黒の勝ち
@@ -501,10 +504,10 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				
 				c.add(loselabel);
 				loselabel.setBounds(0,0,767,645);
-
+  
 			}
-			timer.stop();
-			
+		timer.stop();
+		end = 1;
 			
 		}
 	}
