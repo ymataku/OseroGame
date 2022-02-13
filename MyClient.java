@@ -16,7 +16,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	private Container c;
 	private ImageIcon blackIcon, whiteIcon, boardIcon,passbtn,startbtn,losebtn;
 	private ImageIcon blacknumber,whitenumber;
-	private ImageIcon  background,footer,winback,loseback;
+	private ImageIcon  background,footer,winback,loseback,drawback;
 	private int start = 0;
 	private int myColor;
 	private ImageIcon myIcon, yourIcon,submyIcon,subyourIcon;
@@ -38,7 +38,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	JLabel thebackground;
 	JLabel thebacknumber;
 	JLabel cross;
-	JLabel winlabel,loselabel;
+	JLabel winlabel,loselabel,drawlabel;
 	JLabel popup;
 	JLabel thefooter;
 	JFrame pop = new JFrame();
@@ -83,6 +83,8 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		//勝った時の演出
 		winback = new ImageIcon("winexample1.png");
 		
+		//引き分けたときの演出
+		drawback = new ImageIcon("draw.png");
 
 		c.setLayout(null);//自動レイアウトの設定を行わない
 		//ボタンの生成
@@ -99,13 +101,14 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 					buttonArray[i][j] = new JButton(blackIcon);
 				}else if(i==3&&j==3){
 					buttonArray[i][j] = new JButton(whiteIcon);
-				}
-
-				
-				
-				else {
+				}else {
 					buttonArray[i][j] = new JButton(boardIcon);
 				}
+				// if(i%2==0){
+				// 	buttonArray[i][j] = new JButton(whiteIcon);
+				// }else{
+				// 	buttonArray[i][j] = new JButton(blackIcon);
+				// }
 				c.add(buttonArray[i][j]);//ペインに貼り付ける
 			
 				buttonArray[i][j].setBounds(j*60,60*i,60,60);//ボタンの大きさと位置を設定する．(x座標，y座標,xの幅,yの幅）
@@ -162,6 +165,9 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 
 		//負けて時の表示インスタンス化
 		loselabel = new JLabel(loseback);
+
+		//引き分けの時の表示のインスタンス化
+		drawlabel = new JLabel(drawback);
 
 		//サーバに接続する
 		Socket socket = null;
@@ -477,37 +483,42 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		
 		//引き分けの時
 		if(judgement == 0){
+		    c.removeAll();
+			c.add(drawlabel);
+			drawlabel.setBounds(0,0,767,645);
 			end = 1;
+			// System.out.println("引き分け");
 			
 		}else if(judgement == 1 || passcount2 == 2){
 		    //白の勝ち
-			c.removeAll();
-			if(myColor == 0){
-				c.add(winlabel);
-				winlabel.setBounds(0,0,767,645);
-			}else{
-				c.add(loselabel);
-				loselabel.setBounds(0,0,767,645);
-			}
-		end = 1;
-		timer.stop();
+		// 	c.removeAll();
+		// 	if(myColor == 0){
+		// 		c.add(winlabel);
+		// 		winlabel.setBounds(0,0,767,645);
+		// 	}else{
+		// 		c.add(loselabel);
+		// 		loselabel.setBounds(0,0,767,645);
+		// 	}
+		// end = 1;
+		// timer.stop();
+
 	
 
 		}else if(judgement == 2 || passcount1 == 2){
 			//黒の勝ち
-			c.removeAll();
-			if(myColor == 1){
+		// 	c.removeAll();
+		// 	if(myColor == 1){
 			
-				c.add(winlabel);
-				winlabel.setBounds(0,0,767,645);
-			}else{
+		// 		c.add(winlabel);
+		// 		winlabel.setBounds(0,0,767,645);
+		// 	}else{
 				
-				c.add(loselabel);
-				loselabel.setBounds(0,0,767,645);
+		// 		c.add(loselabel);
+		// 		loselabel.setBounds(0,0,767,645);
   
-			}
-		timer.stop();
-		end = 1;
+		// 	}
+		// timer.stop();
+		// end = 1;
 			
 		}
 	}
