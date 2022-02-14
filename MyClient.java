@@ -61,7 +61,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 
 		//アイコンの設定
 		//オセロの駒
-		System.out.println("white");
+		// System.out.println("white");
 		whiteIcon = new ImageIcon("White5.png");
 		blackIcon = new ImageIcon("Black5.png");
 		boardIcon = new ImageIcon("nothing.png");
@@ -125,8 +125,9 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
         c.add(theLabelA);
         theLabelA.setBounds(320,350,120,25);
         theLabelA.addMouseListener(this);
-		theProgressBar = new JProgressBar(1, 1000);
+		theProgressBar = new JProgressBar(1,1000);
         theProgressBar.setValue(1000);
+		
   
 
 		//スタートボタン作成
@@ -197,7 +198,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				out.println(myName);//接続の最初に名前を送る
 				String myNumberStr = br.readLine();
 				int myNumberInt = Integer.parseInt(myNumberStr);
-			    System.out.println(myNumberInt);
+			    // System.out.println(myNumberInt);
 				
 				if(myNumberInt % 2 == 0){
 					myColor = 0;
@@ -223,7 +224,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 					int turnchange = 0;
 					String inputLine = br.readLine();//データを一行分だけ読み込んでみる
 					if (inputLine != null) {//読み込んだときにデータが読み込まれたかどうかをチェックする
-						System.out.println(inputLine);//デバッグ（動作確認用）にコンソールに出力する
+						// System.out.println(inputLine);//デバッグ（動作確認用）にコンソールに出力する
 						String[] inputTokens = inputLine.split(" ");	//入力データを解析するために、スペースで切り分ける
 						String cmd = inputTokens[0];//コマンドの取り出し．１つ目の要素を取り出す
 						String theBName = inputTokens[1];//ボタンの名前（番号）の取得	
@@ -287,7 +288,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 							}
 							//駒を置いた後、相手側のタイマーを発動させてからターンを交代する。
 							if(turnchange == 1){
-								System.out.println("turnchange enter");
+								// System.out.println("turnchange enter");
 								myTurn = 1 - myTurn;
 								ActionEvent ee = new ActionEvent(this,0,"ProgressBarStart");
 								actionPerformed(ee);
@@ -295,14 +296,14 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 						//placeから送られてきた値を実際にひっくり返す命令
 						}else if(cmd.equals("FLIP")){
 							int theColor = Integer.parseInt(inputTokens[2]);
-							System.out.println("color check"+x+" "+y+" "+myIcon);
+							// System.out.println("color check"+x+" "+y+" "+myIcon);
 							buttonArray[y][x].setIcon(myIcon);
 
 						//パスを行うときの命令
 						}else if(cmd.equals("pass")){
 							int passcheck = Integer.parseInt(inputTokens[1]);
 							if(passcheck == 1000){
-								System.out.println("no count");
+								// System.out.println("no count");
 							}else{
 								int theColor = Integer.parseInt(inputTokens[2]);
 								if(theColor == 0){
@@ -354,7 +355,8 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 							
 						}	
 					}
-					System.out.println("autopass"+autopass());
+					System.out.println("--------this is autopass judgement-------------------------");
+					
 					
 				}
 				socket.close();
@@ -371,7 +373,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	
 	//勝敗がついたかの判断をする
 	public int [] judgement(){
-		System.out.println("this is judgement checking");
+	
 		int check = 0;
 		int judge = 4;
 		int blackcount = 0;
@@ -389,7 +391,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				}
 			}
 		}
-		System.out.println(check);
+		
 		if(check == 0){
 			if(judgement[1] > judgement[2]){
 				judgement[0] = 2;
@@ -418,14 +420,14 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		black = values[1];
 		white = values[2];
 
-		System.out.println("judgement"+judgement+"black"+black+" "+"white"+" "+white);
+	
 
 		//黒の駒の数
 		if(checking == 0){
-			System.out.println("first");
+			
 			checking++;
 		}else{
-			System.out.println("second");
+			
 			c.remove(blackint);
 			c.remove(whiteint);
 			c.remove(thebackground);
@@ -495,14 +497,14 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		// 		c.add(loselabel);
 		// 		loselabel.setBounds(0,0,767,645);
 		// 	}
-		// end = 1;
+		end = 1;
 		// timer.stop();
 
 	
 
 		}else if(judgement == 2 || passcount1 == 2){
 			//黒の勝ち
-		// 	c.removeAll();
+		// 	c.removeAll()
 		// 	if(myColor == 1){
 			
 		// 		c.add(winlabel);
@@ -514,7 +516,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
   
 		// 	}
 		// timer.stop();
-		// end = 1;
+		end = 1;
 			
 		}
 	}
@@ -538,15 +540,15 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			}else{
 				if(myColor == myTurn){
 					// 自分のターンだと駒を置く処理を実行
-					System.out.println("クリック");
+					
 					Icon theIcon = theButton.getIcon();
 					if(theIcon.equals(boardIcon)){
 						// 駒がおけるときの反応
-						System.out.println(theIcon);//デバッグ（確認用）に，クリックしたアイコンの名前を出力する
+						
 						Point theMLoc = e.getPoint();//発生元コンポーネントを基準とする相対座標
-						System.out.println(theMLoc);//デバッグ（確認用）に，取得したマウスの位置をコンソールに出力する
+					
 						// Point theBtnLocation = theButton.getLocation();//クリックしたボタンを座標を取得する
-						System.out.println();
+					
 						String msg = "PLACE"+" "+theArrayIndex+" "+myColor;
 						out.println(msg);//送信データをバッファに書き出す
 						out.flush();
@@ -567,7 +569,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	public int filpButtons(int y,int x,int j,int i){
 		int flipNum = 0;
 		if(j==0&&i==0){
-			System.out.println("方向が指定されていません");
+			
 		}else{
 			for(int dy=j, dx=i; ; dy+=j, dx+=i){
 				//ボタンの位置情報を作る
@@ -605,7 +607,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			subyourIcon = blackIcon;
 		}
 		if(j==0&&i==0){
-			// System.out.println("方向が指定されていません");
+			
 		}else{
 			if((buttonArray[x][y].getIcon() == boardIcon)){
 				for(int dy=j, dx=i; ; dy+=j, dx+=i){
@@ -659,7 +661,6 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		for(int i=-1;i<=1;i++){
 			for(int j=-1;j<=1;j++){
 				if((x+j) < 0 || (y+i) < 0 || (x+j) > 7 || (y+i) > 7){
-					System.out.println("範囲外です");
 					continue;
 				}else{
 					if(buttonArray[y+i][x+j].getIcon() == yourIcon){
@@ -708,7 +709,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 
 		}else{
 			Point theMLoc = e.getPoint();//発生元コンポーネントを基準とする相対座標
-			System.out.println(theMLoc);//デバッグ（確認用）に，取得したマウスの位置をコンソールに出力する
+			// System.out.println(theMLoc);//デバッグ（確認用）に，取得したマウスの位置をコンソールに出力する
 			Point theBtnLocation = theButton.getLocation();//クリックしたボタンを座標を取得する
 			theBtnLocation.x += theMLoc.x-15;//ボタンの真ん中当たりにマウスカーソルがくるように補正する
 			theBtnLocation.y += theMLoc.y-15;//ボタンの真ん中当たりにマウスカーソルがくるように補正する
@@ -724,10 +725,10 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	}
 
 	public void mouseMoved(MouseEvent e) {//マウスがオブジェクト上で移動したときの処理
-		System.out.println("マウス移動");
+		// System.out.println("マウス移動");
 		int theMLocX = e.getX();//マウスのx座標を得る
 		int theMLocY = e.getY();//マウスのy座標を得る
-		System.out.println(theMLocX+","+theMLocY);//コンソールに出力する
+		// System.out.println(theMLocX+","+theMLocY);//コンソールに出力する
 	}
 	public void actionPerformed(ActionEvent e) {
         String theCmd = e.getActionCommand();
@@ -736,9 +737,9 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		//スタートを均一化
 		if(theCmd.equals("judgement")){
 			
-			System.out.println("judgement enter");
+			// System.out.println("judgement enter");
 			if(myColor == myTurn){
-				System.out.println("success");
+				// System.out.println("success");
 				ActionEvent ee = new ActionEvent(this,0,"ProgressBarStart");
 				actionPerformed(ee);
 			}else{
@@ -760,7 +761,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		}
 		if(theCmd.equals("ProgressBarStart")){
 			if(timercheck == 0){
-				System.out.println("hello");
+				// System.out.println("hello");
 			}else{
 				timer.stop();
 			}
@@ -779,13 +780,14 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				count = count - 1;
 				myCount = count;
 				theProgressBar.setValue(count);
-				String test = String.format("%04d",theProgressBar.getValue());
-				theLabelForProgressBar.setText(test);
+				String text = String.format("%04d",theProgressBar.getValue());
+				theLabelForProgressBar.setText(text);
 				if(count<=0){
 					timer.stop();
 					String msg = "lose"+" "+myColor;
 					out.println(msg);
 					out.flush();
+					end = 1;
 					
 				}	
 			}
